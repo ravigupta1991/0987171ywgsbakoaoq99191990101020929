@@ -1,0 +1,28 @@
+require('dotenv').config();
+const TelegramBot = require('node-telegram-bot-api');
+const axios = require('axios');
+
+const token = process.env.TOKEN; 
+const bot = new TelegramBot(token, { polling: true });
+
+bot.onText(/\/start/, (msg) => {
+    bot.sendMessage(msg.chat.id, "Send me any text and I will convert it into an image.\n\nEx-: flower\nLong Prompt:- floweringarden");
+});
+
+bot.on('message', (msg) => {
+    const chatId = msg.chat.id;
+    const text = msg.text;
+
+    if (text === '/start') return;
+
+    const imageUrl = `https://image.pollinations.ai/prompt/${text}`;
+
+    axios.get(imageUrl, { responseType: 'arraybuffer' })
+        .then(response => {
+            bot.sendPhoto(chatId, response.data);
+        })
+        .catch(error => {
+            console.error('Error fetching image:', error);
+            bot.sendMessage(chatId, "Sorry, I couldn't generate an image for that text.");
+        });
+});
