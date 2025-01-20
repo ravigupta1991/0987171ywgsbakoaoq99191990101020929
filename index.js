@@ -10,7 +10,7 @@ const app = express(); // Create express app
 const port = process.env.PORT || 3000; // Use environment port or 3000
 
 bot.onText(/\/start/, (msg) => {
-    bot.sendMessage(msg.chat.id, "🤖 Bot Name   :-Polimage\n\nSend me any text and I will convert it into an image.It will take 10 sec to 1 min to generate the image.\n\nEx-: flower, happy dog");
+    bot.sendMessage(msg.chat.id, "🤖 Bot Name:- Polimage\n\nSend me any text and I will convert it into an image.It will take 10 sec to 1 min to generate the image.\n\nEx:- flower, happy dog");
 });
 
 bot.on('message', (msg) => {
