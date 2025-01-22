@@ -10,7 +10,7 @@ const app = express(); // Create express app
 const port = process.env.PORT || 3000; // Use environment port or 3000
 
 bot.onText(/\/start/, (msg) => {
-    bot.sendMessage(msg.chat.id, "🤖 Bot Name:- Polimage\n\nSend me any text and I will convert it into an image.It will take 10 sec to 1 min to generate the image.\n\nEx:- flower, happy dog");
+    bot.sendMessage(msg.chat.id, "🤖 Bot Name:- Polimage\n\nSend me any text and I will convert it into an image. It will take 10 sec to 1 min to generate the image.\n\nEx:- flower, happy dog");
 });
 
 bot.on('message', (msg) => {
@@ -19,16 +19,26 @@ bot.on('message', (msg) => {
 
     if (text === '/start') return;
 
-    const imageUrl = `https://image.pollinations.ai/prompt/${text}`;
+    // Send processing message
+    bot.sendMessage(chatId, "Processing your request...").then((processingMessage) => {
+        
+        const imageUrl = `https://image.pollinations.ai/prompt/${text}`;
 
-    axios.get(imageUrl, { responseType: 'arraybuffer' })
-        .then(response => {
-            bot.sendPhoto(chatId, response.data);
-        })
-        .catch(error => {
-            console.error('Error fetching image:', error);
-            bot.sendMessage(chatId, "Sorry, I couldn't generate an image for that text.");
-        });
+        axios.get(imageUrl, { responseType: 'arraybuffer' })
+            .then(response => {
+                // Send the image
+                bot.sendPhoto(chatId, response.data).then(() => {
+                    // Delete the processing message
+                    bot.deleteMessage(chatId, processingMessage.message_id);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching image:', error);
+                bot.sendMessage(chatId, "Sorry, I couldn't generate an image for that text.");
+                // Delete the processing message
+                bot.deleteMessage(chatId, processingMessage.message_id);
+            });
+    });
 });
 
 // Start the Express server
