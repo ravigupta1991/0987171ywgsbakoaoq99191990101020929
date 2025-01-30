@@ -22,7 +22,8 @@ bot.on('message', (msg) => {
     // Send processing message
     bot.sendMessage(chatId, "Processing your request...").then((processingMessage) => {
         
-        const imageUrl = `https://image.pollinations.ai/prompt/${text}`;
+        // Add nologo=false to the image URL
+        const imageUrl = `https://image.pollinations.ai/prompt/${text}?nologo=true`;
 
         axios.get(imageUrl, { responseType: 'arraybuffer' })
             .then(response => {
