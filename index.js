@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 const channelUsername = '@polimage';
 
 bot.onText(/\/start/, (msg) => {
-    bot.sendMessage(msg.chat.id, "Welcome to **Polimage**\nSend me any text and I will convert it into an image. It will take 10 sec to 1 min to generate the image.\n\nEx:- flower, happy dog");
+    bot.sendMessage(msg.chat.id, "Welcome to Polimage\nSend me any text and I will convert it into an image. It will take 10 sec to 1 min to generate the image.\n\nEx:- flower, happy dog");
 });
 
 bot.on('message', (msg) => {
@@ -22,12 +22,12 @@ bot.on('message', (msg) => {
     const options = {
         reply_markup: {
             inline_keyboard: [
-                [{ text: "Joined ✅️", callback_data: `check_membership:${text}` }]
+                [{ text: "Verify ✅️", callback_data: `check_membership:${text}` }]
             ]
         }
     };
 
-    bot.sendMessage(chatId, `**Please join the channel @polimage to use this bot.**`, options)
+    bot.sendMessage(chatId, `Please join the channel @polimage to use this bot.`, options)
         .then(sentMessage => {
             const messageId = sentMessage.message_id;
 
